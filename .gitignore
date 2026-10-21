@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+
+# env
+.env
+.env.*
+!.env.example
+
+# platform
+.vercel/
+.DS_Store
+
+# logs
+npm-debug.log*
+
+# generated from assets/ by scripts/sync-assets.mjs
+public/resume.pdf
+resume/*.aux
+resume/*.log
+resume/*.out
+resume/*.pdf

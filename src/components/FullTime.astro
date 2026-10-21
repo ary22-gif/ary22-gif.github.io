@@ -1,0 +1,93 @@
+---
+import { content, copy, resumeUrl } from '../content';
+import Bug from './Bug.astro';
+import Shootout from './Shootout.astro';
+const f = copy.fulltime;
+const person = content.person;
+const hrefs: Record<string, string> = {
+  github: person.github,
+  linkedin: person.linkedin,
+  resume: resumeUrl,
+};
+---
+
+<section id="fulltime" class="ft wrap" aria-labelledby="ft-h" data-zone data-fulltime>
+  <Bug time={f.bugTime} label={f.bug} variant="red" />
+  <h2 id="ft-h" class="ft__title d">
+    <span class="ft__a" data-ft-a>{f.titleA}<span class="red">.</span></span><br /><span class="gold ft__b" data-ft-b>{f.titleB}</span>
+  </h2>
+
+  <div class="ft__cols">
+    <Shootout />
+
+    <div class="direct">
+      <p class="direct__label m">{f.skip}</p>
+      <a href={`mailto:${person.email}`} class="copy" data-copy={person.email}>
+        <span class="copy__roll copy__label">
+          <span class="copy__line" data-roll-a>{person.email}</span>
+          <span class="copy__line copy__line--b" data-roll-b aria-hidden="true">{f.copiedLabel}</span>
+        </span>
+        <span class="copy__roll copy__hint m">
+          <span class="copy__line" data-roll-a>{f.copyHint}</span>
+          <span class="copy__line copy__line--b" data-roll-b aria-hidden="true">{f.copiedHint}</span>
+        </span>
+        <span class="copy__ripple" aria-hidden="true" data-copy-ripple></span>
+      </a>
+      <p class="sr-only" aria-live="polite" data-copy-status></p>
+      <ul class="links">
+        {f.links.map((l) => (
+          <li>
+            <a href={hrefs[l.key]} class="link" rel={l.key === 'resume' ? undefined : 'me noopener'} data-resume={l.key === 'resume' ? '' : undefined}>
+              {l.label} <span class="link__desc">{l.desc}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="direct__avail">{f.availability}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ft { position: relative; padding-top: clamp(40px, 4cqi, 64px); padding-bottom: clamp(32px, 3cqi, 48px); }
+  .ft__title { margin: 20px 0 0; font-weight: 900; font-size: clamp(88px, 17cqi, 260px); line-height: .8; }
+  .ft__cols { margin-top: 56px; display: flex; flex-wrap: wrap; gap: clamp(32px, 5cqi, 72px); align-items: flex-start; }
+
+  .direct { flex: 1 1 320px; min-width: 0; }
+  .direct__label { margin: 0 0 12px; font-size: 11px; letter-spacing: .14em; color: var(--muted); }
+  .copy {
+    width: 100%; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 12px;
+    min-height: 64px; padding: 12px 22px; border-radius: 18px; background: var(--trophy); color: var(--on-trophy);
+    font-weight: 600; font-size: 16px; text-decoration: none;
+    transition: transform var(--dur-fast), background-color var(--dur-fast);
+  }
+  .copy:hover { background: var(--floodlight); color: var(--on-trophy); transform: translateY(-2px); }
+  .copy { position: relative; overflow: hidden; }
+  .copy__label { overflow-wrap: anywhere; }
+  /* Label roll (spec §5.6): both states share one line box; the copied state waits below. */
+  .copy__roll { position: relative; display: grid; overflow: hidden; }
+  .copy__line { grid-area: 1 / 1; }
+  .copy__line--b { transform: translateY(110%); }
+  .copy__hint .copy__line { text-align: right; }
+  .copy__ripple {
+    position: absolute; left: var(--rx, 50%); top: var(--ry, 50%); width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    border-radius: var(--r-pill); border: 2px solid rgba(18, 13, 2, .45); opacity: 0; pointer-events: none;
+  }
+  /* Social rows: description slides in from the right on hover (always visible on touch). */
+  @media (hover: hover) and (pointer: fine) {
+    .link__desc { opacity: 0; translate: 14px 0; transition: opacity .3s var(--ease-out), translate .3s var(--ease-out); }
+    .link:hover .link__desc, .link:focus-visible .link__desc { opacity: 1; translate: 0 0; }
+  }
+  .ft__a, .ft__b { display: inline-block; }
+  @container (min-width: 340px) { .copy__label { white-space: nowrap; } }
+  .copy__hint { flex: none; font-size: 11px; letter-spacing: .14em; font-weight: 700; }
+  .links { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .link {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 56px; padding: 0 20px;
+    border-radius: 16px; border: 1px solid var(--control); color: var(--floodlight); text-decoration: none; font-weight: 600;
+    transition: border-color var(--dur-fast), color var(--dur-fast);
+  }
+  .link:hover { border-color: var(--trophy); color: var(--trophy); }
+  .link__desc { font-weight: 400; font-size: 13px; color: var(--muted); text-align: right; }
+  .direct__avail { margin: 20px 0 0; font-size: 15px; line-height: 23px; color: var(--muted); }
+</style>

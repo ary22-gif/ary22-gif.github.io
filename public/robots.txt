@@ -1,0 +1,5 @@
+# Match Day, Ayush Yadav's portfolio
+User-agent: *
+Allow: /
+
+Sitemap: https://ary22-gif.github.io/sitemap.xml
